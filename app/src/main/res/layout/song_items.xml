@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/music_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginStart="5dp">
+    <RelativeLayout
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:layout_height="60dp"
+        android:layout_width="60dp"
+        android:id="@+id/song_image"
+        android:padding="5dp"/>
+        <TextView
+            android:id="@+id/song_name"
+            android:layout_width="270dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toEndOf="@id/song_image"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="marquee"
+            android:scrollHorizontally="true"
+            android:padding="15dp"
+            android:singleLine="true"
+            android:text="Song Title"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            android:textStyle="bold|italic" />
+
+      <ViewSwitcher
+          android:id="@+id/switchImage"
+          android:layout_width="60dp"
+          android:layout_height="60dp"
+          android:layout_toEndOf="@+id/song_name"
+          android:layout_alignParentEnd="true">
+          <ImageView
+              android:layout_height="60dp"
+              android:layout_width="60dp"
+              android:id="@+id/more_options"
+              android:src="@drawable/ic_more_options"
+              android:padding="10dp"/>
+          <ImageView
+              android:layout_height="60dp"
+              android:layout_width="60dp"
+              android:id="@+id/delete_favourites"
+              android:src="@drawable/ic_delete"
+              android:padding="10dp"/>
+
+      </ViewSwitcher>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
