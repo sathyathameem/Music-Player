@@ -55,14 +55,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        viewPager = findViewById(R.id.viewPager);
-        //getPermission();
         runtimePermission();
-
     }
 
     public void initViewPager(){
-       // viewPager = findViewById(R.id.viewPager);
+        viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragments(songFragment, "Songs");
@@ -71,42 +68,18 @@ public class MainActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
-
             @Override
             public void onPageSelected(int position) {
                 if (position == 1){
-                    Log.e("onTabselected","favourites is selected");
                    favouritesFragment.refreshLoad();
-
                 }
-
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
     }
 
     //Using Dexter Library
@@ -144,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
                     String duration = cursor.getString(2);
                     String path = cursor.getString(3);
                     String id = cursor.getString(4);
-                    Log.e("Path : "+ path, "title : "+title);
-                    Log.e("Path : "+ path, "id : "+id);
                     SongFile songFile = new SongFile(path,title,id,album,duration);
                     tempSongsList.add(songFile);
                 }
