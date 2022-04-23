@@ -1,8 +1,5 @@
 package com.example.rebmem.musicplayer.Adapters;
 
-import static com.example.rebmem.musicplayer.Fragments.FavouritesFragment.favouriteSongs;
-import static com.example.rebmem.musicplayer.Fragments.FavouritesFragment.getAllFavourites;
-
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
@@ -103,13 +100,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
                                                                 sFiles.get(position).getDuration());
                                 favoritesOperations = new FavouritesDBOperations(context);
                                 favoritesOperations.addSongFav(favList);
-                                favouriteSongs = getAllFavourites(context);
-                                notifyDataSetChanged();
+                                ArrayList<SongFile> newList = favoritesOperations.getAllFavorites();
+                                new FavouritesFragment().songAdapter = new SongAdapter(context,newList, ListType.FAVOURITE_SONGS);
                                 break;
                             case R.id.delete:
                                 Toast.makeText(context,"Delete clicked", Toast.LENGTH_SHORT).show();
                                 deleteSong(position, v);
                                 break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + item.getItemId());
                         }
                         return true;
                     }

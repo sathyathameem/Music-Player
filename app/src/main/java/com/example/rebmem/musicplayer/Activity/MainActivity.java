@@ -5,6 +5,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
@@ -15,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -42,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<SongFile> songFiles;
     private TabLayout tabLayout;
     private  ViewPager viewPager;
-
+    private static SongListFragment songFragment = new SongListFragment();
+    private static FavouritesFragment favouritesFragment = new FavouritesFragment();
 
     //Shared preferences
     static boolean shuffleBoolean = false, repeatBoolean = false;
@@ -51,18 +55,58 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        viewPager = findViewById(R.id.viewPager);
         //getPermission();
         runtimePermission();
+
     }
 
     public void initViewPager(){
-        viewPager = findViewById(R.id.viewPager);
+       // viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragments(new SongListFragment(), "Songs");
-        viewPagerAdapter.addFragments(new FavouritesFragment(), "Favourites");
+        viewPagerAdapter.addFragments(songFragment, "Songs");
+        viewPagerAdapter.addFragments(favouritesFragment, "Favourites");
         viewPager.setAdapter(viewPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 1){
+                    Log.e("onTabselected","favourites is selected");
+                   favouritesFragment.refreshLoad();
+
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     //Using Dexter Library
@@ -72,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                         songFiles = getAllSongs(getApplicationContext());
-                        //favouriteSongs = getAllFavourites(getApplicationContext());
                         initViewPager();
                     }
 
