@@ -32,7 +32,7 @@ public class SongListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_song_list, container, false);
         recyclerView = view.findViewById(R.id.songsRecyclerView);
-        //recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
         if(! (songFiles.size() < 1)){
             songAdapter = new SongAdapter(getContext(),songFiles);
             recyclerView.setAdapter(songAdapter);

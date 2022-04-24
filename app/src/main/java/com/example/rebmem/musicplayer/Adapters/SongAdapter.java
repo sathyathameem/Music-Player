@@ -73,6 +73,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("What view is this ", v.getParent().toString());
                 Intent intent = new Intent(context, PlayerActivity.class);
                 intent.putExtra("position",position).putExtra("songs",sFiles);
                 context.startActivity(intent);
@@ -113,7 +114,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
             }
         });
 
-
     }
 
     private void addToFavourites(int position, Context context){
@@ -126,7 +126,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         favoritesOperations = new FavouritesDBOperations(context);
         favoritesOperations.addSongFav(favList);
         ArrayList<SongFile> newList = favoritesOperations.getAllFavorites();
-        new FavouritesFragment().songAdapter = new SongAdapter(context,newList, ListType.FAVOURITE_SONGS);
+        FavouritesFragment.songAdapter = new SongAdapter(context,newList, ListType.FAVOURITE_SONGS);
 
     }
 
@@ -219,6 +219,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void updateSearchList(ArrayList<SongFile> searchedList ){
+       /* sFiles = new ArrayList<>();
+        sFiles.addAll(searchedList);*/
     }
 
 }
