@@ -1,24 +1,22 @@
 package com.example.rebmem.musicplayer.Activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.SearchView;
+
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
+
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuItem;
+
 
 import com.example.rebmem.musicplayer.Adapters.ViewPagerAdapter;
 import com.example.rebmem.musicplayer.Database.FavouritesDBOperations;
@@ -36,13 +34,14 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     public static final int REQUEST_CODE = 1;
     public static ArrayList<SongFile> songFiles;
     private TabLayout tabLayout;
     private  ViewPager viewPager;
-
+    private static SongListFragment songFragment = new SongListFragment();
+    private static FavouritesFragment favouritesFragment = new FavouritesFragment();
 
     //Shared preferences
     static boolean shuffleBoolean = false, repeatBoolean = false;
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //getPermission();
         runtimePermission();
     }
 
@@ -59,9 +57,23 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragments(new SongListFragment(), "Songs");
-        viewPagerAdapter.addFragments(new FavouritesFragment(), "Favourites");
+        viewPagerAdapter.addFragments(songFragment, "Songs");
+        viewPagerAdapter.addFragments(favouritesFragment, "Favourites");
         viewPager.setAdapter(viewPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 1){
+                   favouritesFragment.refreshLoad();
+                }
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -72,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                         songFiles = getAllSongs(getApplicationContext());
-                        //favouriteSongs = getAllFavourites(getApplicationContext());
                         initViewPager();
                     }
 
@@ -101,8 +112,6 @@ public class MainActivity extends AppCompatActivity {
                     String duration = cursor.getString(2);
                     String path = cursor.getString(3);
                     String id = cursor.getString(4);
-                    Log.e("Path : "+ path, "title : "+title);
-                    Log.e("Path : "+ path, "id : "+id);
                     SongFile songFile = new SongFile(path,title,id,album,duration);
                     tempSongsList.add(songFile);
                 }
@@ -123,6 +132,33 @@ public class MainActivity extends AppCompatActivity {
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search, menu);
+        MenuItem menuItem = menu.findItem(R.id.searchOption);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String userText = newText.toLowerCase();
+        ArrayList<SongFile> searchList = new ArrayList<>();
+        for(SongFile song : songFiles){
+            if(song.getTitle().toLowerCase().contains(userText)){
+                searchList.add(song);
+            }
+        }
+
+        return true;
     }
 
 }

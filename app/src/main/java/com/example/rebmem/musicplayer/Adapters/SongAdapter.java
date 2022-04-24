@@ -1,8 +1,5 @@
 package com.example.rebmem.musicplayer.Adapters;
 
-import static com.example.rebmem.musicplayer.Fragments.FavouritesFragment.favouriteSongs;
-import static com.example.rebmem.musicplayer.Fragments.FavouritesFragment.getAllFavourites;
-
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
@@ -24,14 +21,12 @@ import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.rebmem.musicplayer.Activity.PlayerActivity;
 import com.example.rebmem.musicplayer.Database.FavouritesDBOperations;
 import com.example.rebmem.musicplayer.Fragments.FavouritesFragment;
-import com.example.rebmem.musicplayer.Fragments.SongListFragment;
 import com.example.rebmem.musicplayer.Model.ListType;
 import com.example.rebmem.musicplayer.Model.SongFile;
 import com.example.rebmem.musicplayer.R;
@@ -78,6 +73,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("What view is this ", v.getParent().toString());
                 Intent intent = new Intent(context, PlayerActivity.class);
                 intent.putExtra("position",position).putExtra("songs",sFiles);
                 context.startActivity(intent);
@@ -95,21 +91,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.addFav:
-                                Toast.makeText(context,"Add to Favourites clicked", Toast.LENGTH_SHORT).show();
-                                SongFile favList = new SongFile(sFiles.get(position).getPath(),
-                                                                sFiles.get(position).getTitle(),
-                                                                sFiles.get(position).getId(),
-                                                                sFiles.get(position).getAlbum(),
-                                                                sFiles.get(position).getDuration());
-                                favoritesOperations = new FavouritesDBOperations(context);
-                                favoritesOperations.addSongFav(favList);
-                                favouriteSongs = getAllFavourites(context);
-                                notifyDataSetChanged();
+                                addToFavourites(position,context);
                                 break;
                             case R.id.delete:
                                 Toast.makeText(context,"Delete clicked", Toast.LENGTH_SHORT).show();
                                 deleteSong(position, v);
                                 break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + item.getItemId());
                         }
                         return true;
                     }
@@ -125,6 +114,19 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
             }
         });
 
+    }
+
+    private void addToFavourites(int position, Context context){
+        Toast.makeText(context,"Song added to Favourites playlist", Toast.LENGTH_SHORT).show();
+        SongFile favList = new SongFile(sFiles.get(position).getPath(),
+                sFiles.get(position).getTitle(),
+                sFiles.get(position).getId(),
+                sFiles.get(position).getAlbum(),
+                sFiles.get(position).getDuration());
+        favoritesOperations = new FavouritesDBOperations(context);
+        favoritesOperations.addSongFav(favList);
+        ArrayList<SongFile> newList = favoritesOperations.getAllFavorites();
+        FavouritesFragment.songAdapter = new SongAdapter(context,newList, ListType.FAVOURITE_SONGS);
 
     }
 
@@ -179,8 +181,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
     //working fine.. It is removing from the list as well - deleteFavourites
     private void deleteOption(int position) {
         //showDialog(sFiles.get(position).getPath(), position);
-        Log.e("position &&&&&&&&&&&&&&&&&&&&", position+"");
-        Log.e("position &&&&&&&&&&&&&&&&&&&&", sFiles.get(position).getPath()+"");
         favoritesOperations = new FavouritesDBOperations(context);
         if(sFiles.get(position).getPath() != null){
             favoritesOperations.removeSong(sFiles.get(position).getPath());
@@ -219,6 +219,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void updateSearchList(ArrayList<SongFile> searchedList ){
+       /* sFiles = new ArrayList<>();
+        sFiles.addAll(searchedList);*/
     }
 
 }
