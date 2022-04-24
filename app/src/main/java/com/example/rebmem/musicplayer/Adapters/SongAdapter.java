@@ -75,7 +75,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("What view is this ", v.getParent().toString());
                 Intent intent = new Intent(context, PlayerActivity.class);
                 intent.putExtra("position",position).putExtra("songs",sFiles);
                 context.startActivity(intent);
