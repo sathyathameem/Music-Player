@@ -66,7 +66,7 @@ public class FavouritesFragment extends Fragment{
         setContent();
     }
 
-    public void setContent() {
+    private void setContent() {
         favouriteSongs = favouritesDBOperations.getAllFavorites();
         songAdapter = new SongAdapter(getContext(),favouriteSongs, ListType.FAVOURITE_SONGS);
         recyclerView.setAdapter(songAdapter);
@@ -78,8 +78,6 @@ public class FavouritesFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("Resume is called");
-        //songAdapter.notifyDataSetChanged();
     }
 
     public static ArrayList<SongFile> getAllFavourites(Context context) {

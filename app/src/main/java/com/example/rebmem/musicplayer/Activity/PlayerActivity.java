@@ -39,7 +39,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     SeekBar seekBar;
     FloatingActionButton btnPlayPause;
     BarVisualizer barVisualizer;
-    ImageView albumCover,btnBack;
+    ImageView albumCover;
     int position = -1;
     static ArrayList<SongFile> songsList = new ArrayList<>();
     static Uri uri;
@@ -105,7 +105,6 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
     private void setUpVisualizer() {
         int audioSessionId = mediaPlayer.getAudioSessionId();
-        Log.e("Session id",audioSessionId+"******");
         if(audioSessionId != -1) barVisualizer.setAudioSessionId(audioSessionId);
     }
 
@@ -136,7 +135,11 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         position = intent.getIntExtra("position",-1);
         //songsList = songFiles;
         songsList = (ArrayList) bundle.getParcelableArrayList("songs");
+        for(SongFile song : songsList){
+            Log.e("Song Name &&&&&&&&&&&&&&&&&&&&&", song.getTitle());
+        }
         txtSongName.setText(songsList.get(position).getTitle());
+
         txtSongName.setSelected(true);
         if(songsList != null){
             btnPlayPause.setImageResource(R.drawable.ic_pause);
@@ -428,6 +431,8 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         if(mediaPlayer != null && mediaPlayer.isPlaying()){
             mediaPlayer.stop();
         }
+        shuffleBoolean = false;
+        repeatBoolean = false;
         super.onDestroy();
     }
 

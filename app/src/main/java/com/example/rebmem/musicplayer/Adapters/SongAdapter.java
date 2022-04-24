@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.example.rebmem.musicplayer.Activity.PlayerActivity;
 import com.example.rebmem.musicplayer.Database.FavouritesDBOperations;
 import com.example.rebmem.musicplayer.Fragments.FavouritesFragment;
+import com.example.rebmem.musicplayer.Fragments.SongListFragment;
 import com.example.rebmem.musicplayer.Model.ListType;
 import com.example.rebmem.musicplayer.Model.SongFile;
 import com.example.rebmem.musicplayer.R;
@@ -39,6 +40,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
 
     private final Context context;
     private final ArrayList<SongFile> sFiles;
+    private ArrayList<SongFile> searchedFiles;
     private final ListType lType;
     static FavouritesDBOperations favoritesOperations;
 
@@ -222,8 +224,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
     }
 
     public void updateSearchList(ArrayList<SongFile> searchedList ){
-       /* sFiles = new ArrayList<>();
-        sFiles.addAll(searchedList);*/
+        searchedFiles = new ArrayList<>();
+        searchedFiles.addAll(searchedList);
+        SongListFragment.songAdapter =  new SongAdapter(context,searchedFiles);
     }
 
 }

@@ -157,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 searchList.add(song);
             }
         }
+        songFragment.songAdapter.updateSearchList(searchList);
+        songFragment.refreshSearchLoad();
 
         return true;
     }
