@@ -6,4 +6,24 @@
     android:icon="@android:drawable/ic_menu_search"
     app:showAsAction="ifRoom"
     app:actionViewClass="androidx.appcompat.widget.SearchView"></item>
+<item
+    android:title="Sort Songs By"
+    android:id="@+id/sortOptions"
+    app:showAsAction="never">
+    <menu>
+        <item
+            android:title="Title"
+            android:id="@+id/byTitle"
+            app:showAsAction="never"/>
+        <item
+            android:title="Date (Default)"
+            android:id="@+id/byDate"
+            app:showAsAction="never"/>
+        <item
+            android:title="Size"
+            android:id="@+id/bySize"
+            app:showAsAction="never"/>
+
+    </menu>
+</item>
 </menu>
