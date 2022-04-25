@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -126,7 +125,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
                 sFiles.get(position).getDuration());
         favoritesOperations = new FavouritesDBOperations(context);
         favoritesOperations.addSongFav(favList);
-        ArrayList<SongFile> newList = favoritesOperations.getAllFavorites();
+        ArrayList<SongFile> newList = favoritesOperations.getAllFavourites();
         FavouritesFragment.songAdapter = new SongAdapter(context,newList, ListType.FAVOURITE_SONGS);
 
     }

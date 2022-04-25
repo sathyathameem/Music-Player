@@ -19,7 +19,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<Fragment> fragments;
     private ArrayList<String> titles;
 
-    private String title[] = {"All SONGS", "FAVORITES"};
+    private String title[] = {"All SONGS", "FAVOURITES"};
 
     public ViewPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
