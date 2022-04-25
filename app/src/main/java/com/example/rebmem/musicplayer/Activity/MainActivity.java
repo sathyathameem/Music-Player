@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             String orderBy = null;
             switch (sortOrder){
-                case "sortByName":
+                case "sortByTitle":
                     orderBy = MediaStore.MediaColumns.TITLE + " ASC";
                     break;
                 case "sortByDate":
@@ -192,18 +192,21 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         SharedPreferences.Editor editor = getSharedPreferences(SORT_PREFERENCE,MODE_PRIVATE).edit();
         switch( item.getItemId()) {
-            case R.id.byName:
-                editor.putString("sort", "sortByName");
-                this.recreate();
-              break;
+            case R.id.byTitle:
+                editor.putString("sort", "sortByTitle");
+                editor.apply();
+                recreateActivity();
+               break;
 
             case R.id.byDate:
                 editor.putString("sort", "sortByDate");
-                this.recreate();
+                editor.apply();
+                recreateActivity();
                 break;
             case R.id.bySize:
                 editor.putString("sort", "sortBySize");
-                this.recreate();
+                editor.apply();
+                recreateActivity();
                 break;
         }
 
@@ -211,19 +214,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
        return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onStop() {
-        Log.e("on STOP " , " am I closing?");
-        closeOptionsMenu();
-        super.onStop();
-
+    private void recreateActivity() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recreate();
+            }
+        }, 1000);
     }
 
-    @Override
-    protected void onDestroy() {
-        Log.e("on Destroy " , " am I closing?");
-        closeOptionsMenu();
-        super.onDestroy();
-
-    }
 }

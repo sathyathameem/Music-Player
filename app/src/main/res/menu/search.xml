@@ -12,11 +12,11 @@
     app:showAsAction="never">
     <menu>
         <item
-            android:title="Name"
-            android:id="@+id/byName"
+            android:title="Title"
+            android:id="@+id/byTitle"
             app:showAsAction="never"/>
         <item
-            android:title="Date"
+            android:title="Date (Default)"
             android:id="@+id/byDate"
             app:showAsAction="never"/>
         <item
