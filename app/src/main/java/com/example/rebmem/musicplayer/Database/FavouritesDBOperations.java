@@ -55,7 +55,7 @@ public class FavouritesDBOperations {
         close();
     }
 
-    public ArrayList<SongFile> getAllFavorites() {
+    public ArrayList<SongFile> getAllFavourites() {
         open();
         Cursor cursor = database.query(FavouritesDBHelper.TABLE_FAVOURITES, allColumns,
                 null, null, null, null, null);
