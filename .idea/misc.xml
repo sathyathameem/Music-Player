@@ -3,13 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/gradient_bg.xml" value="0.111" />
         <entry key="app/src/main/res/drawable/ic_chevron_left.xml" value="0.111" />
+        <entry key="app/src/main/res/drawable/ic_chevron_right.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/ic_delete.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/ic_fast_forward.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/ic_fast_rewind.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/ic_library_music.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/ic_menu.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/ic_more_options.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/ic_pause.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/ic_play.xml" value="0.121" />
         <entry key="app/src/main/res/drawable/ic_repeat.xml" value="0.163" />
         <entry key="app/src/main/res/drawable/ic_repeat_off.xml" value="0.163" />
         <entry key="app/src/main/res/drawable/ic_shuffle_off.xml" value="0.121" />
         <entry key="app/src/main/res/drawable/ic_shuffle_on.xml" value="0.163" />
+        <entry key="app/src/main/res/drawable/ic_skip_previous.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/player_bg.xml" value="0.111" />
         <entry key="app/src/main/res/drawable/tab_indicator.xml" value="0.223" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />

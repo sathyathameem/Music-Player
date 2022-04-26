@@ -193,33 +193,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
 
 
     }
-    //Yes and No Button is not showing
-    private void showDialog(final String index, final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Delete")
-                .setMessage("Are you sure you want to delete ?")
-                .setCancelable(true)
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        favoritesOperations.removeSong(index);
-                        sFiles.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position,sFiles.size());
-                        notifyDataSetChanged();
-                        Toast.makeText(context, "Favourite Song deleted", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
 
     public void updateSearchList(ArrayList<SongFile> searchedList ){
         searchedFiles = new ArrayList<>();

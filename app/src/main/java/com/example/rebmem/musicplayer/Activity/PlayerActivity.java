@@ -4,10 +4,12 @@ import static com.example.rebmem.musicplayer.Activity.MainActivity.repeatBoolean
 import static com.example.rebmem.musicplayer.Activity.MainActivity.shuffleBoolean;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.media.MediaMetadataRetriever;
@@ -21,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.rebmem.musicplayer.Model.SongFile;
@@ -45,6 +48,8 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     static Uri uri;
     static MediaPlayer mediaPlayer;
     Thread updateSeekbar, playThread,prevThread,nextThread;
+    Handler mHandler;
+    Runnable mRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +106,38 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        mHandler = new Handler();
+        mRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                if(mediaPlayer != null && mediaPlayer.isPlaying()){
+                    showIdleAlert();
+                }else{
+                    // TODO Auto-generated method stub
+                    Toast.makeText(PlayerActivity.this, "The music player is idle from last 30 seconds ",
+                            Toast.LENGTH_SHORT).show();
+                    stopHandler();//stop first and then start
+                    startHandler();
+                }
+
+            }
+        };
+        startHandler();
+    }
+
+ @Override
+    public void onUserInteraction() {
+        // TODO Auto-generated method stub
+        super.onUserInteraction();
+        stopHandler();//stop first and then start
+        startHandler();
+    }
+    public void stopHandler() {
+        mHandler.removeCallbacks(mRunnable);
+    }
+    public void startHandler() {
+        mHandler.postDelayed(mRunnable, 30000);
     }
 
     private void setUpVisualizer() {
@@ -223,7 +260,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         durationTotal.setText(endTime);
 
         final Handler handler = new Handler();
-        final int delay = 1000;
+        final int delay = 500;
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -262,13 +299,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             @Override
             public void run() {
                 super.run();
-                btnNext.setOnClickListener(new View.OnClickListener(){
-
-                    @Override
-                    public void onClick(View v) {
-                        nextButtonClicked();
-                    }
-                });
+                btnNext.setOnClickListener(v -> nextButtonClicked());
             }
 
         };
@@ -280,13 +311,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             @Override
             public void run() {
                 super.run();
-                btnPrev.setOnClickListener(new View.OnClickListener(){
-
-                    @Override
-                    public void onClick(View v) {
-                        prevButtonClicked();
-                    }
-                });
+                btnPrev.setOnClickListener(v -> prevButtonClicked());
             }
 
         };
@@ -441,5 +466,36 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         nextButtonClicked();
     }
 
+    public void showIdleAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this, R.style.CustomDialogTheme);
+        builder.setTitle("Idle Alert")
+                .setMessage("The player is inactive for 30 seconds, Do you want to continue playing the song?")
+                .setCancelable(false)
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        btnPlayPause.setImageResource(R.drawable.ic_play);
+                        mediaPlayer.stop();
+                        //handleSeekBar();
+                        dialog.cancel();
+                        dialog.dismiss();
+                        onBackPressed();
+                        //stopHandler();//stop first and then start
+                        //startHandler();
+
+                    }
+                })
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        dialog.dismiss();
+                        stopHandler();//stop first and then start
+                        startHandler();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 
 }
