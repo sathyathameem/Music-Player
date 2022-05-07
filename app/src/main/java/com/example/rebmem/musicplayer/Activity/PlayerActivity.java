@@ -3,6 +3,8 @@ package com.example.rebmem.musicplayer.Activity;
 import static com.example.rebmem.musicplayer.Activity.MainActivity.repeatBoolean;
 import static com.example.rebmem.musicplayer.Activity.MainActivity.shuffleBoolean;
 
+import static java.lang.Thread.sleep;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -194,12 +197,14 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                 } else {
                     /** When the player is not playing the control goes back to the songs list **/
                     // TODO Auto-generated method stub
-                    //Toast.makeText(PlayerActivity.this, "The music player is idle from last 30 seconds ",
-                           // Toast.LENGTH_SHORT).show();
-                    //stopHandler();//stop first and then start
-                    //startHandler();
+                    Toast.makeText(PlayerActivity.this, "The music player is idle from last 15 seconds, Hence navigating back to Songs list ",
+                            Toast.LENGTH_LONG).show();
+                    try {
+                       sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     onBackPressed();
-
                 }
 
             }
