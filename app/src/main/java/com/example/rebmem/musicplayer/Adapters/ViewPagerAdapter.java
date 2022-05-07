@@ -1,32 +1,34 @@
 package com.example.rebmem.musicplayer.Adapters;
 
-import static com.example.rebmem.musicplayer.Fragments.FavouritesFragment.favouriteSongs;
-
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
 import com.example.rebmem.musicplayer.Fragments.FavouritesFragment;
 import com.example.rebmem.musicplayer.Fragments.SongListFragment;
-
 import java.util.ArrayList;
 
+/**
+ * This customised class extends the FragmentPagerAdapter
+ * that represents each page as a Fragment that is persistently
+ * kept in the fragment manager as the user can return to the page
+ * **/
 public class ViewPagerAdapter extends FragmentPagerAdapter {
+
+    // All Songs list and playlist collections
     private ArrayList<Fragment> fragments;
     private ArrayList<String> titles;
 
+    //Title shown for the tab
     private String title[] = {"All SONGS", "FAVOURITES"};
 
+    //Constructor
     public ViewPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
         this.fragments = new ArrayList<>();
         this.titles = new ArrayList<>();
     }
-
+    //Returns the Fragment associated with a specified position.
     @NonNull
     @Override
     public Fragment getItem(int position) {
@@ -41,17 +43,17 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return title[position];
     }
-
+    //Returns the number of fragments
     @Override
     public int getCount() {
         return fragments.size();
     }
 
+    /**
+     * This method adds the fragments with the title to the View pager adapter
+     * **/
     public void addFragments(Fragment fragment, String title){
         fragments.add(fragment);
         titles.add(title);
     }
-
-
-
 }

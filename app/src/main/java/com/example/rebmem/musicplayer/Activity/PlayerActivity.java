@@ -260,27 +260,6 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         barVisualizer = findViewById(R.id.bar);
     }
 
-   /* public void addAnimation(View view) {
-        ObjectAnimator objAnimator = ObjectAnimator.ofFloat(albumCover, "rotation", 0f, 360f);
-        objAnimator.setDuration(1000);
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(objAnimator);
-        animatorSet.start();
-    }*/
-
-    /*public String createTime(int duration) {
-        String time = "";
-        int min = duration / 1000 / 60;
-        int sec = duration / 1000 % 60;
-
-        time += min + ":";
-        if (sec < 10) {
-            time += "0";
-        }
-        time += sec;
-        return time;
-    }*/
-
     /**
      * This method calls internally the getIntent() method that started this Player Activity.
      * The caller is the Main Activity which passes the following data and those data can be
@@ -629,12 +608,6 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             setUpVisualizer();
         }
     }
-
-    /*private int getRandom(int i) {
-        Random random = new Random();
-        return random.nextInt(i + 1);
-
-    }*/
 
     /**
      * This is the method called before the current activity
