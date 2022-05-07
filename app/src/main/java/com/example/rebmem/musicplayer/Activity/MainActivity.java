@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     //Shared preferences
     static boolean shuffleBoolean = false, repeatBoolean = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
