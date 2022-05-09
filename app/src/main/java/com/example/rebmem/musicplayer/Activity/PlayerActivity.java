@@ -2,7 +2,6 @@ package com.example.rebmem.musicplayer.Activity;
 
 import static com.example.rebmem.musicplayer.Activity.MainActivity.repeatBoolean;
 import static com.example.rebmem.musicplayer.Activity.MainActivity.shuffleBoolean;
-
 import static java.lang.Thread.sleep;
 
 import android.content.DialogInterface;
@@ -200,7 +199,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                     Toast.makeText(PlayerActivity.this, "The music player is idle from last 15 seconds, Hence navigating back to Songs list ",
                             Toast.LENGTH_LONG).show();
                     try {
-                       sleep(10000);
+                        sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -218,7 +217,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
      * This is used here to check if the app is idle and user has not interacted when the activity is running
      * This is to check if the device becomes idle.
      * {@inheritDoc}
-     * **/
+     **/
     @Override
     public void onUserInteraction() {
         // TODO Auto-generated method stub
@@ -234,7 +233,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
     //This method is called when the runnable thread need to be refreshed/restarted
     public void startHandler() {
-        mHandler.postDelayed(mRunnable, 15000);
+        mHandler.postDelayed(mRunnable, 30000);
     }
 
     //This method is to get the audio session id from the media player and pass it to the visualizer
@@ -260,41 +259,20 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         barVisualizer = findViewById(R.id.bar);
     }
 
-   /* public void addAnimation(View view) {
-        ObjectAnimator objAnimator = ObjectAnimator.ofFloat(albumCover, "rotation", 0f, 360f);
-        objAnimator.setDuration(1000);
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(objAnimator);
-        animatorSet.start();
-    }*/
-
-    /*public String createTime(int duration) {
-        String time = "";
-        int min = duration / 1000 / 60;
-        int sec = duration / 1000 % 60;
-
-        time += min + ":";
-        if (sec < 10) {
-            time += "0";
-        }
-        time += sec;
-        return time;
-    }*/
-
     /**
      * This method calls internally the getIntent() method that started this Player Activity.
      * The caller is the Main Activity which passes the following data and those data can be
      * retrieved using getIntent() in this current activity
-     *  - position of the song @int
-     *  - Songs list @ArrayList
-     *  From the position data,
-     *      - the song name at that position is extracted from the song object and set in the song name display text
-     *      - get the path to pass it as Uri to the media player
-     *      - the selected song from the main activity will be played and the play button image is replaced by pause image
-     *      - if the media player is playing,it is stopped and release to play the song selected by calling start method
-     *      - gets the metadata(e.g Album cover image) to set it up in the image placeholder
-     *      - sets up the Visualizer
-     * **/
+     * - position of the song @int
+     * - Songs list @ArrayList
+     * From the position data,
+     * - the song name at that position is extracted from the song object and set in the song name display text
+     * - get the path to pass it as Uri to the media player
+     * - the selected song from the main activity will be played and the play button image is replaced by pause image
+     * - if the media player is playing,it is stopped and release to play the song selected by calling start method
+     * - gets the metadata(e.g Album cover image) to set it up in the image placeholder
+     * - sets up the Visualizer
+     **/
     private void getIntentMethod() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -334,7 +312,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
      * for the user to visually see how much it is progressed
      * The manual actions happening on the seek bar are handled using setOnSeekBarChangeListener interface.
      * {@inheritDoc}
-     * **/
+     **/
 
     private void handleSeekBar() {
         updateSeekbar = new Thread() {
@@ -416,6 +394,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
      * Glide is a fast and efficient open source media management and
      * image loading framework for Android that wraps media decoding,
      * memory and disk caching, and resource pooling into a simple and easy to use interface.
+     *
      * @param uri
      */
     private void metaData(@NonNull Uri uri) {
@@ -428,11 +407,11 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     }
 
     /**
-     *  This overridden method of the Activity when the current Activity
-     *  will start interacting with the user.
-     *  This method calls three methods that created three new threads
-     *  in the background waiting to listen to the user interaction
-     *  {@inheritDoc}
+     * This overridden method of the Activity when the current Activity
+     * will start interacting with the user.
+     * This method calls three methods that created three new threads
+     * in the background waiting to listen to the user interaction
+     * {@inheritDoc}
      */
     @Override
     protected void onResume() {
@@ -630,18 +609,12 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         }
     }
 
-    /*private int getRandom(int i) {
-        Random random = new Random();
-        return random.nextInt(i + 1);
-
-    }*/
-
     /**
      * This is the method called before the current activity
      * is destroyed. In this method, all the resources are released
      * and stopped. The shuffle button and repeat button is reset to false(off)
      * {@inheritDoc}
-     * */
+     */
     @Override
     protected void onDestroy() {
         if (barVisualizer != null) {
@@ -657,9 +630,9 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
     /**
      * Called when the end of a media source is reached during playback.
-     * @param mp
-     * {@inheritDoc}
-     * */
+     *
+     * @param mp {@inheritDoc}
+     */
     @Override
     public void onCompletion(MediaPlayer mp) {
         nextButtonClicked();
@@ -669,13 +642,13 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
      * This method shows the Alert when there is no user interaction to inform the user
      * that the player is inactive for 15 seconds and to ask if the playback needs to be
      * continued
-     *  Yes - closes the alert and start the idle detecting thread and continue the playback
-     *  No - closes the alert and navigates back to the songs list (Main activity)
-     * */
+     * Yes - closes the alert and start the idle detecting thread and continue the playback
+     * No - closes the alert and navigates back to the songs list (Main activity)
+     */
     public void showIdleAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this, R.style.CustomDialogTheme);
         builder.setTitle("Idle Alert")
-                .setMessage("The player is inactive for 15 seconds, Do you want to continue playing the song?")
+                .setMessage("The player is inactive for 30 seconds, Do you want to continue playing the song?")
                 .setCancelable(false)
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
