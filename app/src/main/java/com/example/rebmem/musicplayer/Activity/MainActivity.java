@@ -1,14 +1,7 @@
 package com.example.rebmem.musicplayer.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-
-import androidx.viewpager.widget.ViewPager;
-
 import android.Manifest;
 import android.content.Context;
-
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,6 +11,11 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.rebmem.musicplayer.Adapters.ViewPagerAdapter;
 import com.example.rebmem.musicplayer.Fragments.FavouritesFragment;
@@ -40,12 +38,12 @@ import java.util.List;
  * This activity is presented to the user as full screen window
  * This activity shows two tabs (Using Tablayout that provides horizontal layout to display tabs)
  * This has two tabs
- *  - Songs list tab
- *  - Playlist tab
+ * - Songs list tab
+ * - Playlist tab
  * This Tab Layout is used in integration with ViewPager so that the user can flip left and right through the tabs
  * The ViewPagerAdaptor will generate the content that the ViewPager shows
  * The options menu having search and sort functionality is added
- *
+ * <p>
  * {@inheritDoc}
  * </p>
  *
@@ -54,20 +52,19 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     //Variables used are declared here
     public static ArrayList<SongFile> songFiles;
-    private TabLayout tabLayout;
-    private  ViewPager viewPager;
-    private static SongListFragment songFragment = new SongListFragment();
-    private static FavouritesFragment favouritesFragment = new FavouritesFragment();
-    private String SORT_PREFERENCE = "SortOrder";
-
     //Shared preferences
     static boolean shuffleBoolean = false, repeatBoolean = false;
+    private static final SongListFragment songFragment = new SongListFragment();
+    private static final FavouritesFragment favouritesFragment = new FavouritesFragment();
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private final String SORT_PREFERENCE = "SortOrder";
 
-   /**
-    * This overridden method of an activity's lifecycle is called
-    * when the activity is created. In this method the view is set up
-    * after obtaining the necessary permission
-    * */
+    /**
+     * This overridden method of an activity's lifecycle is called
+     * when the activity is created. In this method the view is set up
+     * after obtaining the necessary permission
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,18 +74,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     /**
      * This method is to request app permissions for
-     *  - Reading external storage for Music files
-     *  - Record Audio ( This is required for setting up the Visualizer during the audio playback
-     *  This opens up a dialog box that has Allow and Deny buttons. In order to proceed using this
-     *  app, the app should be granted permission.
-     *  Using Dexter which is an Android library that simplifies the process of requesting permissions at runtime.
-     *  Dexter frees our permission code from our activities and lets us write the logic anywhere.
-     *  Once the permissions are granted,
-     *  Songs are fetched from the local storage and the content for the viewpager is set up.
-     *
-     * **/
-    public void runtimePermission(){
-        Dexter.withContext(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.RECORD_AUDIO,Manifest.permission.READ_EXTERNAL_STORAGE)
+     * - Reading external storage for Music files
+     * - Record Audio ( This is required for setting up the Visualizer during the audio playback
+     * This opens up a dialog box that has Allow and Deny buttons. In order to proceed using this
+     * app, the app should be granted permission.
+     * Using Dexter which is an Android library that simplifies the process of requesting permissions at runtime.
+     * Dexter frees our permission code from our activities and lets us write the logic anywhere.
+     * Once the permissions are granted,
+     * Songs are fetched from the local storage and the content for the viewpager is set up.
+     **/
+    public void runtimePermission() {
+        Dexter.withContext(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
@@ -109,8 +105,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
      * - Songs list fragment
      * - playlist fragment
      * The view pager enables the user to switch between the tabs and shows the relevant data that is set up in the fragments
-     * **/
-    public void initViewPager(){
+     **/
+    public void initViewPager() {
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -122,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
+
             /**
              * Position 0 is Songs list
              * Position 1 is Play list created during runtime
@@ -130,10 +127,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
              * **/
             @Override
             public void onPageSelected(int position) {
-                if (position == 1){
-                   favouritesFragment.refreshLoad();
+                if (position == 1) {
+                    favouritesFragment.refreshLoad();
                 }
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -151,52 +149,53 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
      * which is added to the songs list
      * This method is also called when sorting in different order, the sort order is shared to this method using
      * Shared preferences (Interface for accessing and modifying preference data returned by Context.getSharedPreferences(String, int))
+     *
      * @param context
      * @return ArrayList<SongFile>
-     * **/
+     **/
     public ArrayList<SongFile> getAllSongs(Context context) {
-           SharedPreferences preferences = getSharedPreferences(SORT_PREFERENCE,MODE_PRIVATE);
-           String sortOrder = preferences.getString("sort", "sortByDate");
-            ArrayList<SongFile> tempSongsList = new ArrayList<>();
-            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            String orderBy = null;
-            switch (sortOrder){
-                case "sortByTitle":
-                    orderBy = MediaStore.MediaColumns.TITLE + " ASC";
-                    break;
-                case "sortByDate":
-                    orderBy = MediaStore.MediaColumns.DATE_ADDED + " ASC";
-                    break;
-                case "sortBySize":
-                    orderBy = MediaStore.MediaColumns.SIZE + " DESC";
-                    break;
-            }
-            String[] projections = {
-                    MediaStore.Audio.Media.ALBUM,
-                    MediaStore.Audio.Media.TITLE,
-                    MediaStore.Audio.Media.DURATION,
-                    MediaStore.Audio.Media.DATA,
-                    MediaStore.Audio.Media._ID,
-                    MediaStore.Audio.Media.DATE_ADDED, MediaStore.Audio.Media.SIZE
-                        };
-
-            Cursor cursor = context.getContentResolver().query(uri, projections,null, null, orderBy);
-            if(cursor != null){
-                while(cursor.moveToNext()){
-                    String album = cursor.getString(0);
-                    String title = cursor.getString(1);
-                    String duration = cursor.getString(2);
-                    String path = cursor.getString(3);
-                    String id = cursor.getString(4);
-                    Log.e(title + "The Date added ", cursor.getString((5)));
-                    Log.e(title + "Size ", cursor.getString((6)));
-                    SongFile songFile = new SongFile(path,title,id,album,duration);
-                    tempSongsList.add(songFile);
-                }
-                cursor.close();
-            }
-            return tempSongsList;
+        SharedPreferences preferences = getSharedPreferences(SORT_PREFERENCE, MODE_PRIVATE);
+        String sortOrder = preferences.getString("sort", "sortByDate");
+        ArrayList<SongFile> tempSongsList = new ArrayList<>();
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String orderBy = null;
+        switch (sortOrder) {
+            case "sortByTitle":
+                orderBy = MediaStore.MediaColumns.TITLE + " ASC";
+                break;
+            case "sortByDate":
+                orderBy = MediaStore.MediaColumns.DATE_ADDED + " ASC";
+                break;
+            case "sortBySize":
+                orderBy = MediaStore.MediaColumns.SIZE + " DESC";
+                break;
         }
+        String[] projections = {
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.DATE_ADDED, MediaStore.Audio.Media.SIZE
+        };
+
+        Cursor cursor = context.getContentResolver().query(uri, projections, null, null, orderBy);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String album = cursor.getString(0);
+                String title = cursor.getString(1);
+                String duration = cursor.getString(2);
+                String path = cursor.getString(3);
+                String id = cursor.getString(4);
+                Log.e(title + "The Date added ", cursor.getString((5)));
+                Log.e(title + "Size ", cursor.getString((6)));
+                SongFile songFile = new SongFile(path, title, id, album, duration);
+                tempSongsList.add(songFile);
+            }
+            cursor.close();
+        }
+        return tempSongsList;
+    }
 
     /**
      * onCreateOptionsMenu() is used to specify the options menu for an activity.
@@ -204,9 +203,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
      * Menu provided in the callback. After inflating the menu defined by search.xml
      * setting the setOnQueryTextListener on the searchView
      * (Callbacks for changes to the query text)
-     * @param menu
      *
-     * **/
+     * @param menu
+     **/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search, menu);
@@ -226,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
      * The Songs list is iterated to see if the search text matched the title
      * and adds to the new list and that list is set in the main song fragment
      * displayed to the user
+     *
      * @param newText
      * @return
      */
@@ -233,12 +233,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onQueryTextChange(String newText) {
         String userText = newText.toLowerCase();
         ArrayList<SongFile> searchList = new ArrayList<>();
-        for(SongFile song : songFiles){
-            if(song.getTitle().toLowerCase().contains(userText)){
+        for (SongFile song : songFiles) {
+            if (song.getTitle().toLowerCase().contains(userText)) {
                 searchList.add(song);
             }
         }
-        songFragment.songAdapter.updateSearchList(searchList);
+        SongListFragment.songAdapter.updateSearchList(searchList);
         songFragment.refreshSearchLoad();
 
         return true;
@@ -249,18 +249,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
      * The menu item is put in the shared preferences editor
      * and the activity is recreated to display the main songs list with the
      * selected sort order set in the editor which is retrieved in the getAllSongs method.
+     *
      * @param item
      * @return
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        SharedPreferences.Editor editor = getSharedPreferences(SORT_PREFERENCE,MODE_PRIVATE).edit();
-        switch( item.getItemId()) {
+        SharedPreferences.Editor editor = getSharedPreferences(SORT_PREFERENCE, MODE_PRIVATE).edit();
+        switch (item.getItemId()) {
             case R.id.byTitle:
                 editor.putString("sort", "sortByTitle");
                 editor.apply();
                 recreateActivity();
-               break;
+                break;
 
             case R.id.byDate:
                 editor.putString("sort", "sortByDate");
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
 
 
-       return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     /**
